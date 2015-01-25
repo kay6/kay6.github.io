@@ -29,13 +29,15 @@ body {
 	text-align: right;
 }
 ul { 
-	margin: 0; 
-	padding: 1;
+	margin: 20px;
+	margin-top:0px;
+	margin-bottom:0px;
+	padding: 1px;
 }
 p {
 	font-size:1em;
-	margin: 0; 
-	padding: 1;
+	margin: 0px; 
+	padding: 1px;
 }
 
 
