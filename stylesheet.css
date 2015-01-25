@@ -2,21 +2,24 @@ body {
 	background-color:black;
 }
 #leftcol {
-	background-color:Gray;
+	background-color:#009900;
 	color:black;
+	font-family:"Times New Roman", Times, Serif;
 	font-weight:bold;
 	text-align: right;
 	font-size:1.5em;
 }
 #rtcollight {
-	background-color:White;
+	background-color:#99FF99;
 	color:black;
+	font-family: "Ubuntu", Sans-Serif;
 	text-align: left;
 	font-size:1.17em;
 }
 #rtcoldark {
-	background-color:Lightgray;
+	background-color:#47FF47;
 	color:black;
+	font-family:"Ubuntu", Sans-Serif;
 	text-align: left;
 	font-size:1.17em;
 
