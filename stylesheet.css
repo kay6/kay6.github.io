@@ -1,7 +1,23 @@
 body {
 	background-color:black;
 }
-td {
-	background-color:gray;
+#leftcol {
+	background-color:Gray;
 	color:black;
+	font-weight:bold;
+	text-align: right;
+	font-size:1.5em;
+}
+#rtcollight {
+	background-color:White;
+	color:black;
+	text-align: left;
+	font-size:1.17em;
+}
+#rtcoldark {
+	background-color:Lightgray;
+	color:black;
+	text-align: left;
+	font-size:1.17em;
+
 }
