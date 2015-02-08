@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="hw.css"/>
+		<title>Andy IE59000 - Homework 2</title>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	</head>
+	<body>
+		<center>
+		<br><br>
+		<p>A red background denotes scores below average of the group. e.g. bottom 50% in red.</p><br>
+		<script type="text/javascript">
+			var graduates; // declare global variable
+
+			// read in json data using d3.js
+			d3.json("https://hivelab.org/static/students.json", function(inputdata) {
+				console.log(inputdata);
+				graduates=inputdata;
+			// I expect there is a way to do this in d3.js but couldn't make it work.
+
+
+		
+			// jQuery build for the new table. Primary source: jsfiddle.net examples. 
+				$(document).ready(function(){
+				// establish variable tr.
+					var tr;
+					var tag;
+					var avggpa=0.;
+					var avgv=0.;
+					var avgq=0.;
+					var avge=0.;
+					var avgr=0.;
+					var highlight;
+					var highlight2;
+					var highlight3;
+					var long=graduates.length;
+				// loop to determine averages.
+					for (var j=0; j< long; j++){
+						avggpa=avggpa + graduates[j].GPA;
+						avgv=avgv + graduates[j].GRE_V;
+						avgq=avgq + graduates[j].GRE_Q;
+						avge=avge + graduates[j].Essay;
+						avgr=avgr + graduates[j].Recom;
+					}
+					avggpa=avggpa / long;
+					avgv=avgv / long;
+					avgq=avgq / long;
+					avge=avge / long;
+					avgr=avgr / long;
+				// loop through JSON data file till the maximum entry.
+					for (var i = 0; i < long; i++) {
+						if ((i % 2) === 0) {
+							tag="'roweven'";
+						}
+						else {
+							tag="'rowodd'";
+						}
+						tr=$("<tr id="+tag+">");
+					// loop to set TD tag for highlight
+						if (graduates[i].GPA < avggpa){
+							highlight="<td id='low'>";
+						}
+						else {
+							highlight="<td>";
+						}
+						if (graduates[i].GRE_V < avgv){
+							highlight2="<td id='low'>";
+						}
+						else {
+							highlight2="<td>";
+						}
+						if (graduates[i].GRE_Q < avgq){
+							highlight3="<td id='low'>";
+						}
+						else {
+							highlight3="<td>";
+						}
+						if (graduates[i].Essay < avge){
+							highlight4="<td id='low'>";
+						}
+						else {
+							highlight4="<td>";
+						}
+						if (graduates[i].Recom < avgr){
+							highlight5="<td id='low'>";
+						}
+						else {
+							highlight5="<td>";
+						}
+					// alternately written:--->  $("<tr>").append("<td" + .....);
+						tr.append("<td>" + graduates[i].Name+ "</td>");
+						tr.append(highlight+ graduates[i].GPA+ "</td>");
+						tr.append(highlight2 + graduates[i].GRE_V+ "</td>");
+						tr.append(highlight3 + graduates[i].GRE_Q+ "</td>");
+						tr.append(highlight4 + graduates[i].Essay+ "</td>");
+						tr.append(highlight5 + graduates[i].Recom+ "</td>");	
+					// Append table with entire row tr.				
+						$('table').append(tr);
+
+					}
+				//window.alert("GPA:"+avggpa+", V:"+avgv+", Q:"+avgq+" "+avge+" "+avgr);
+				});
+			});
+
+		</script>
+		<table cellpadding="10">
+			<tr id="title">
+				<!-- <td id="leftcol">Name</td> -->
+				<td>Name</td>
+				<td>GPA</td>
+				<td>GRE_V</td>
+				<td>GRE_Q</td>
+				<td>Essay</td>
+				<td>Recom</td>
+			</tr>
+		</table>
+	</body></center>
+</html>

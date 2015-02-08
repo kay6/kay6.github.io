@@ -1,5 +1,6 @@
 body {
 	background-color:black;
+	color:#F5F5DC;
 }
 #leftcol {
 	background-color:#009900;
@@ -28,6 +29,7 @@ body {
 #dates {
 	text-align: right;
 }
+
 ul { 
 	margin: 20px;
 	margin-top:0px;
@@ -38,6 +40,10 @@ p {
 	font-size:1em;
 	margin: 0px; 
 	padding: 1px;
+	color:white;
 }
 
+#hw2 {
+	color:#F5F5DC;
+}
 

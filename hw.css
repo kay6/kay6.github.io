@@ -1,0 +1,39 @@
+body {
+	background-color:black;
+	color:#F5F5DC;
+}
+
+table {
+	border: 1px solid white;
+
+}
+
+#title {
+	background-color:#25383C;
+	font-family:"Times New Roman", Times, Serif;
+	font-weight:bold;
+	text-align: center;
+	font-size:1.75em;
+    vertical-align: text-top;
+}
+#rowodd {
+	background-color:#6D6968;
+	color:black;
+	font-family: "Ubuntu", Sans-Serif;
+	text-align: center;
+	font-size:1.5em;
+}
+#roweven {
+	background-color:#848482;
+	color:black;
+	font-family:"Ubuntu", Sans-Serif;
+	text-align: center;
+	font-size:1.5em;
+
+}
+
+
+#low { 
+	background-color:#990012;
+}
+
