@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="hw3.css"/>
+		<title>Andy IE59000 - Homework 3 - Global 4th Grade Education</title>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+	</head>
+	<body>
+		<center><a href="http://DistantCollaborators.github.io" target="_blank">
+		<svg width="400" height="80">
+			<rect width="400" height="70" rx="20" ry="20" style="fill:#848482"></rect>
+			<rect x="5" y="5" rx="20" ry="20" width="390" height="60" style="fill:white; stroke:black; stroke-width:2"></rect>
+			<text x="50" y="35" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">IE59000 Homework 3 - Andy Kay</text>
+			<text x="105" y="55" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">Distant Collaborator</text>
+		</svg></a>
+		</center><br>
+
+		<center><svg width="410" height="100">
+			<rect width="390" height="70" x="5" y="5" style="fill:grey; stroke:white; stroke-width:2"></rect>
+			<text x="8" y="32" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black"> 4th Grade Global Math and Science Scores</text>
+			<text x="80" y="60" font-family="Ubuntu, Sans-Serif" font-size="15" fill="black">Mouse over for country specifics</text>
+		</svg></center>
+
+		<center><div class="chart">
+		</div></center> 
+
+		<br>
+
+		<center><div id="legend">
+			<h1><u>Analysis:</u>&nbsp&nbsp&nbsp A possible deduction from this visualization is that time spend in school and time spent teaching specific subjects is less critical than the quality of the teaching itself and/or cultural differences between countries.</h1><h2>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  This visualization for global four grader scores versus instructional time spent shows that a large amount of time spent teaching mathmatics or science doesn't necessarily result in a high test score. Additional, based on the size of the circles (scaled to reflect the difference in total time students spend in school per year), how much total time a students spends in school (all subjects) doesn't directly impact high test scores either. <h2>
+			<h2><u>Legend: statistical notes</u></h2>
+			<ul style="list-style-type:none">
+				<li>3 - The TIMSS average includes only education systems that are members of the International Association for the Evaluation of Educational Achievement (IAE), which develops and implements TIMSS at the international level. "Benchmarking" education systems are not members of the IEA and are therefore not included in the average.</li><br>
+				<li>6 - National Defined Population covers 90 to 95 percent of National Target Population.</li><br>
+				<li>7 - Exclusion rates for Azerbaijan and George are slightly underestimated as some conflict zones were not covered and no official statistics were available.</li><br>
+				<li>8 - National Target Population does not include all of the International Target Population defined by TIMSS.</li><br>
+				<li>11 - Met guidelines for sample participation rates only after replacement schools were included.</li><br>
+				<li>12 - Nearly satified guidelines for sample participation rates after replacement schools were included.</li><br>
+				<li>13 - National Defined Population cover less than 90 percent of National Target population (but at least 77 percent).</li><br>
+				<li>14 - All U.S. state data are based on public school students only.</li><br>
+		</div></center> 
+
+		<br><a href="http://nces.ed.gov/programs/digest/d12/tables/dt12_460.asp" target="_blank"><p align="right">National Center for Education Statistics Data Source</p></a>
+
+		<script type="text/javascript">
+
+			// d3.js read-in of cleaned csv
+			d3.csv("Avg4thGradeScoresClean.csv", function(gradedata) {
+				console.log(gradedata);
+				// append circles to data
+			
+				var w = 800;
+				var h = 800;
+				//var formatPercent = d3.format(".1%")
+				var padding = 40;
+
+				var svg = d3.select("div")
+					.append("svg")
+					.attr("width",w)
+					.attr("height", h);
+
+				var xscale = d3.scale.linear()
+					.domain([d3.min(gradedata, function(d){
+						return d["Science instructional time hours per year"];}), d3.max(gradedata, function(d){
+						return d["Mathmatics instructional time hours per year"];})
+					])
+					.range([padding, w - padding*2]);
+
+				var yscale = d3.scale.linear()
+					.domain([d3.min(gradedata, function(d){
+						return d["Science average score\\2\\"];}), d3.max(gradedata, function(d){
+						return d["Mathematics average score\\2\\"];})
+					])
+					.range([h - padding, padding]);
+
+				//Define X axis
+				var xAxis = d3.svg.axis()
+					.scale(xscale)
+					.orient("bottom")
+					.ticks(9);
+				//	.tickValues([100,120,140,160,180,200,220,240,250]);
+				//	.tickFormat(formatPercent);
+
+				//Define Y Axis
+				var yAxis = d3.svg.axis()
+					.scale(yscale)
+					.orient("left")
+					.ticks(6);
+				//	.tickFormat(formatPercent);
+
+
+				svg.selectAll("circle")
+					.data(gradedata)
+					.enter()
+					.append("circle")
+					.attr("cx", function(d) {
+						return xscale(d["Mathmatics instructional time hours per year"]);
+					})
+					.attr("cy", function(d) {
+						return yscale(d["Mathematics average score\\2\\"]);
+					})
+					.attr("r", function(d) {
+						return (15./1200.)*d["Total instructional hours per year"];
+					})
+					.attr("fill", "red")
+					.on("mouseover", function (d) {
+						console.log(d)
+			   			svg.append("text")
+			   			.attr("id","tooltip")
+			   			.text(d["Country or other education system"]+":  "+d["Mathmatics instructional time hours per year"]+" hrs/yr of Math out of "+d["Total instructional hours per year"]+" total teaching hrs/yr.")//			   			.attr("x", xscale(d["Mathmatics instructional time hours per year"]))
+//			   			.attr("y", yscale(d["Mathematics average score\\2\\"]))
+			   			.attr("x", 0)
+			   			.attr("y", 20)
+			   			.attr("font-family", "ubuntu")
+			   			.attr("font-size", "20px")
+			   			.attr("fill", "black");
+			   		})
+			   		.on("mouseout", function(d) {
+					//Remove the tooltip
+						d3.select("#tooltip").remove();
+			   		});
+
+
+				svg.selectAll("ellipse")
+					.data(gradedata)
+					.enter()
+					.append("ellipse")
+					.attr("cx", function(d) {
+						return xscale(d["Science instructional time hours per year"])
+					})
+					.attr("cy", function(d) {
+						return yscale(d["Science average score\\2\\"]);
+					})
+					.attr("rx", function(d) {
+						return (15./1200.)*d["Total instructional hours per year"];
+					})
+					.attr("ry", function(d) {
+						return (15./1200.)*d["Total instructional hours per year"];
+					})
+					.attr("fill", function(d) {
+						if (d["Science instructional time hours per year"]=="") {return "none"}
+						else { return "blue"}
+					})
+
+					.on("mouseover", function (d) {
+						console.log(d)
+			   			svg.append("text")
+			   			.attr("id","tooltip")
+			   			.text(d["Country or other education system"]+":  "+d["Science instructional time hours per year"]+" hrs/yr of Science out of "+d["Total instructional hours per year"]+" total teaching hrs/yr.")
+//			   			.attr("x", xscale(d["Science instructional time hours per year"]))
+//			   			.attr("y", yscale(d["Science average score\\2\\"]))
+			   			.attr("x", 0)
+			   			.attr("y", 20)
+			   			.attr("font-family", "ubuntu")
+			   			.attr("font-size", "20px")
+			   			.attr("fill", "black");
+ 					})
+ 					.on("mouseout", function(d) {
+					//Remove the tooltip
+						d3.select("#tooltip").remove();
+			   		});
+
+/*				svg.selectAll("text")
+			   		.data(gradedata)
+			   		.enter()
+			   		.append("text")
+			   		.text(function(d) {
+						return d["Country or other education system"];
+					})
+			   		.attr("x", function(d) {
+						return xscale(d["Mathmatics instructional time hours per year"]);			 
+					})
+			   		.attr("y", function(d) {
+						return yscale(d["Mathematics average score\\2\\"]);
+					})
+			   		.attr("font-family", "ubuntu")
+			   		.attr("font-size", "10px")
+			   		.attr("fill", "black");
+*/
+
+/*			   		.on("mouseout", function(d) {
+				   		d3.select(this)
+							.attr("fill", "rgb(0, 0, " + (d * 10) + ")");
+			   		});
+*/
+
+			   	// Create X Axis Group
+			   	svg.append("g")
+			   		.attr("class","axis")
+			   		.attr("transform", "translate(0, "+(h-padding)+")")
+			   		.call(xAxis);
+
+			   	// Create Y Axis group
+			   	svg.append("g")
+			   		.attr("class", "axis")
+					.attr("transform", "translate("+padding+",0)")
+			   		.call(yAxis);
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","middle")
+			   		.attr("x", w/2)
+			   		.attr("y", h)
+			   		.text("Total Instructional Time (Hours/Year)");
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","end")
+			   		.attr("y", padding/4)
+			   		.attr("dy", ".25em")
+			   		.attr("x", 0-(h/2))
+			   		.attr("transform", "rotate (-90)")
+			   		.text("Average Test Score");
+
+			   	svg.append("rect")
+			   		.attr("class","label")
+			   		.attr("x", xscale(220))
+			   		.attr("y", yscale(260))
+			   		.attr("width", 20)
+			   		.attr("height", 10)
+			   		.attr("fill", "red");
+
+			   	svg.append("rect")
+			   		.attr("class","label")
+			   		.attr("x", xscale(220))
+			   		.attr("y", yscale(250))
+			   		.attr("width", 20)
+			   		.attr("height", 10)
+			   		.attr("fill", "blue");	
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","left")
+			   		.attr("x", xscale(230))
+			   		.attr("y", yscale(255))
+			   		.text("Mathmatics");
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","left")
+			   		.attr("x", xscale(230))
+			   		.attr("y", yscale(243))
+			   		.text("Science");
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","left")
+			   		.attr("x", xscale(210))
+			   		.attr("y", yscale(230))
+			   		.attr("font-family", "ubuntu")
+			   		.attr("font-size", "9px")
+			   		.text("Circles to scale in total instructional hrs/yr.")
+			});
+
+		</script>
+	</body></center>
+</html>
