@@ -3,44 +3,53 @@
 	<head>
 		<link type="text/css" rel="stylesheet" href="hw3.css"/>
 		<title>Andy IE59000 - Homework 3 - Global 4th Grade Education</title>
+
+<!-- d3.js, Jquery and Ajax Scripts -->
+
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
-		<script>
+
+<!-- Google Analytics Script -->
+<script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
   ga('create', 'UA-60190697-1', 'auto');
   ga('send', 'pageview');
-
-		</script>
+</script>
 
 	</head>
 	<body>
+
+		<!-- Page Title Bar -->
 		<center><a href="http://DistantCollaborators.github.io" target="_blank">
 		<svg width="400" height="80">
 			<rect width="400" height="70" rx="20" ry="20" style="fill:#848482"></rect>
 			<rect x="5" y="5" rx="20" ry="20" width="390" height="60" style="fill:white; stroke:black; stroke-width:2"></rect>
-			<text x="50" y="35" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">IE59000 Homework 3 - Andy Kay</text>
+			<text x="50" y="35" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">IE59000 Homework 3 - Andy</text>
 			<text x="105" y="55" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">Distant Collaborator</text>
 		</svg></a>
 		</center><br>
 
+		<!-- Homework Title Bar -->
 		<center><svg width="410" height="100">
 			<rect width="390" height="70" x="5" y="5" style="fill:lightgrey; stroke:white; stroke-width:2"></rect>
 			<text x="8" y="32" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black"> 4th Grade Global Math and Science Scores</text>
 			<text x="80" y="60" font-family="Ubuntu, Sans-Serif" font-size="15" fill="black">Mouse over for country specifics</text>
 		</svg></center>
 
+		<!-- Div for Chart -->
 		<center><div class="chart">
 		</div></center> 
 
 		<br>
 
+		<!-- Assigment Analysis Contect -->
 		<center><div id="legend">
-			<h1><u>Analysis:</u>&nbsp&nbsp&nbsp A possible deduction from this visualization is that time spend in school and time spent teaching specific subjects is less critical than the quality of the teaching itself and/or cultural differences between countries.</h1><h2>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  This visualization for global four grader scores versus instructional time spent shows that a large amount of time spent teaching mathmatics or science doesn't necessarily result in a high test score. Additional, based on the size of the circles (scaled to reflect the difference in total time students spend in school per year), how much total time a students spends in school (all subjects) doesn't directly impact high test scores either. <h2>
+			<h1><u>Chart Analysis:</u>&nbsp&nbsp&nbsp A possible deduction from this visualization is that time spend in school and time spent teaching specific subjects is less critical than the quality of the teaching itself and/or cultural differences between countries.</h1><h2>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  This visualization for global four grader scores versus instructional time spent shows that a large amount of time spent teaching mathmatics or science doesn't necessarily result in a high test score. Additional, based on the size of the circles (scaled to reflect the difference in total time students spend in school per year), how much total time a students spends in school (all subjects) doesn't directly impact high test scores either. <h2>
+			<h1><u>WebTraffic Analysis:</u></h1><h2>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  This webpage is monitored via Google Analytics. The only social network available for this page is Purdue and this class. (Believe it or not, I don't have a facebook account or Google network). As of 11:30CST, 1 Mar 2015, three different users have visited this page via direct access from two different countries. The operating systems were Linux and Windows during 7 different sessions / pageviews and 42% of visits were new sessions. The duration of visits is very short in seconds.<h2>
 			<h2><u>Legend: statistical notes</u></h2>
 			<ul style="list-style-type:none">
 				<li>3 - The TIMSS average includes only education systems that are members of the International Association for the Evaluation of Educational Achievement (IAE), which develops and implements TIMSS at the international level. "Benchmarking" education systems are not members of the IEA and are therefore not included in the average.</li><br>
@@ -53,20 +62,23 @@
 				<li>14 - All U.S. state data are based on public school students only.</li><br>
 		</div></center> 
 
-		<br><a href="http://nces.ed.gov/programs/digest/d12/tables/dt12_460.asp" target="_blank"><p align="right">National Center for Education Statistics Data Source</p></a>
+		<a href="http://nces.ed.gov/programs/digest/d12/tables/dt12_460.asp" target="_blank"><p align="right">Data Source: National Center for Education Statistics</p></a>
+		<a href="http://www.google.com/analytics/" target="_blank"><p align="right">Web Tracker: Google Analytics</p></a>
 
+		<!-- D3.js Chart Script -->
 		<script type="text/javascript">
 
-			// d3.js read-in of cleaned csv
+			// d3.js read-in of cleaned/edited csv
 			d3.csv("Avg4thGradeScoresClean.csv", function(gradedata) {
+				// Log data for inspection
 				console.log(gradedata);
-				// append circles to data
 			
 				var w = 800;
 				var h = 800;
 				//var formatPercent = d3.format(".1%")
 				var padding = 40;
 
+				//Var for svg chart build
 				var svg = d3.select("div")
 					.append("svg")
 					.attr("width",w)
@@ -101,7 +113,7 @@
 					.ticks(6);
 				//	.tickFormat(formatPercent);
 
-
+				// Append Circle with mouseover
 				svg.selectAll("circle")
 					.data(gradedata)
 					.enter()
@@ -133,7 +145,7 @@
 						d3.select("#tooltip").remove();
 			   		});
 
-
+				// Append Ellipse with mouseover
 				svg.selectAll("ellipse")
 					.data(gradedata)
 					.enter()
@@ -160,8 +172,6 @@
 			   			svg.append("text")
 			   			.attr("id","tooltip")
 			   			.text(d["Country or other education system"]+":  "+d["Science instructional time hours per year"]+" hrs/yr of Science out of "+d["Total instructional hours per year"]+" total teaching hrs/yr.")
-//			   			.attr("x", xscale(d["Science instructional time hours per year"]))
-//			   			.attr("y", yscale(d["Science average score\\2\\"]))
 			   			.attr("x", 0)
 			   			.attr("y", 20)
 			   			.attr("font-family", "ubuntu")
@@ -172,7 +182,7 @@
 					//Remove the tooltip
 						d3.select("#tooltip").remove();
 			   		});
-
+// Commented part to show text next to every data point. Total mess to view.
 /*				svg.selectAll("text")
 			   		.data(gradedata)
 			   		.enter()
@@ -209,6 +219,7 @@
 					.attr("transform", "translate("+padding+",0)")
 			   		.call(yAxis);
 
+			   	// Append labels,scales, etc to chart
 			   	svg.append("text")
 			   		.attr("class","label")
 			   		.attr("text-anchor","middle")
