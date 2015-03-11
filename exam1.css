@@ -1,0 +1,47 @@
+body,p {
+	background-color:black;
+	color:white;
+}
+
+.chart {
+    line-height:30px;
+    background-color:white;
+    height:800px;
+    width:800px; */
+    float:center;
+    padding:5px;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: black;
+	shape-rendering: crispEdges;
+}
+ 
+.axis text {
+	font-family: "ubuntu", Sans-serif;
+	font-size: 11px;
+}
+
+circle:hover {
+	fill: yellow;
+}
+ellipse:hover {
+	fill:yellow;
+}
+
+#legend {
+	line-height: 1.4;
+	height: 730px;
+	width: 700px;
+	background-color:white;
+	color:black;
+	font-family: "Ubuntu", Sans-Serif;
+	text-align: Left;
+	font-size:10px;
+	padding:2px;
+	word-wrap: break-word;
+}
+
+
