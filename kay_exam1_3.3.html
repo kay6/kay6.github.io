@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="exam1.css"/>
+		<title>Andy IE59000 - Exam1 - Question 3.2</title>
+
+<!-- d3.js, Jquery and Ajax Scripts -->
+
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+
+
+	</head>
+	<body>
+
+		<!-- Page Title Bar -->
+		<center>
+		<svg width="400" height="80">
+			<rect width="400" height="70" rx="20" ry="20" style="fill:#848482"></rect>
+			<rect x="5" y="5" rx="20" ry="20" width="390" height="60" style="fill:white; stroke:black; stroke-width:2"></rect>
+			<text x="50" y="35" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">IE59000- Andy Kay</text>
+			<text x="105" y="55" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">Exam 1 Question 3.3</text>
+		</svg>
+		</center><br>
+
+		<!-- Homework Title Bar -->
+		<center><svg width="430" height="100">
+			<rect width="410" height="70" x="5" y="5" style="fill:lightgrey; stroke:white; stroke-width:2"></rect>
+			<text x="80" y="32" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black"> Extra Credit</text>
+			<text x="5" y="60" font-family="Ubuntu, Sans-Serif" font-size="15" fill="black"></text>
+		</svg></center>
+
+		<p>I didn't have time to do the extra credit. I lost most of time time manipulating the arrayed object unfortunately. i would have applied Ch9 and 10 from the book to solution 3.2 to solve the extra credit as well as internet sources.<p>
+
+		<!-- Div for Chart -->
+		<center><div class="chart">
+		</div></center> 
+
+		<br>
+
+		<a href="https://hivelab.org/static/exam1.json" target="_blank"><p align="right">Hive Lab JSON file</p></a>
+
+		<!-- D3.js Chart Script -->
+		<script type="text/javascript">
+
+			// read in json data using d3.js
+			// Source1: is Interactive Data Visulization - Scott Murray
+			// Source2: http://bl.ocks.org/mbostock/3886208
+			// Source3: http://codepen.io/superpikar/pen/xCeiu
+			var globalinputdata;
+			var w = 600;
+			var h = 600;
+			var padding = 20;
+
+				//Var for svg chart build
+				var svg = d3.select("div")
+					.append("svg")
+					.attr("width",w)
+					.attr("height", h);
+
+			d3.json("https://hivelab.org/static/exam1.json", function(data) {
+				console.log(data);
+
+			});
+			
+		</script>
+
+	</body></center>
+</html>
