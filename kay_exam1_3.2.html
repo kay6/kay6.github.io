@@ -120,16 +120,14 @@
 			   		.data(chartdata)
 			   		.enter()
 			   		.append("rect")
-			   		.attr("x", function(d,i) {
-						return xscale(d.x);
+			   		.attr("x", function(d) {
+						return xscale(d);
 					})
 					.attr("y", function(d) {
-						return h-yscale(d.y0+d.y);
+						return h-yscale(d);
 					})
 					.attr("width", xscale.rangeBand())
-					.attr("height", function(d) {
-			   			return yscale(d.y);
-			   		})
+					.attr("height", h);
 			   	// Append labels,scales, etc to chart
 			   	svg.append("text")
 			   		.attr("class","label")
