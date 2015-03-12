@@ -10,7 +10,6 @@
 		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
 
-
 	</head>
 	<body>
 
@@ -30,12 +29,14 @@
 			<text x="80" y="32" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black"> Comparison of numbers of IE students</text>
 			<text x="5" y="60" font-family="Ubuntu, Sans-Serif" font-size="15" fill="black">Still needed to fix the SVG details on spacing and alignment.</text>
 		</svg></center>
+		<center><p>Not enough time allocated for problem #3.1, 3.2,3.3. I can do these problems but they are more difficult than the homeworks and have less time to do them. Still need to clean up all of the SVG presentations from D3. Axes are drawing below my area.</p></center>
 
 		<!-- Div for Chart -->
 		<center><div class="chart">
 		</div></center> 
 
 		<br>
+
 
 		<a href="https://hivelab.org/static/exam1.json" target="_blank"><p align="right">Hive Lab JSON file</p></a>
 
@@ -46,53 +47,48 @@
 			// Source1: is Interactive Data Visulization - Scott Murray
 			// Source2: http://bl.ocks.org/mbostock/3886208
 			// Source3: http://codepen.io/superpikar/pen/xCeiu
-			// Source4: assistance from project team member Gregory Renner
-			var globalinputdata;
+			// source4: http://bost.ocks.org/mike/bar/2/
+			// Source5: telephone assistance from project team member Gregory Renner
+			var chartdata;
 			var w = 600;
 			var h = 600;
 			var padding = 20;
 
-				//Var for svg chart build
-				var svg = d3.select("div")
+			//Var for svg chart build
+			var svg = d3.select("div")
 					.append("svg")
 					.attr("width",w)
 					.attr("height", h);
 
+			//New approach than 3.1. Couldn't get it to work for 3.1.
 			d3.json("https://hivelab.org/static/exam1.json", function(data) {
 				console.log(data);
 
-				// can properly resolve a forEach loop so going brute force method.
-				globalinputdata = [[data[0][ 'University A' ], data[1][ 'University A' ], data[2][ 'University A' ], data[3][ 'University A' ]], [data[0][ 'University B' ], data[1][ 'University B' ], data[2][ 'University B' ], data[3][ 'University B' ]], [data[0][ 'University C' ], data[1][ 'University C' ], data[2][ 'University C' ], data[3][ 'University C' ]], [data[0][ 'University D' ], data[1][ 'University D' ], data[2][ 'University D' ], data[3][ 'University D' ]], [data[0][ 'University E' ], data[1][ 'University E' ], data[2][ 'University E' ], data[3][ 'University E' ]]];
- 				console.log(globalinputdata);
+				chartdata=data.map(function(d) {
+					return [{x:0,y:d["University A"]},
+							{x:1,y:d["University B"]},
+							{x:2,y:d["University C"]},
+							{x:3,y:d["University D"]},
+							{x:4,y:d["University E"]},
+							d["Year"]];
+				});
+				console.log(chartdata);
 
- 				// next step for a brute force method to manipulate object arrays.
- 				var justseniordata = [globalinputdata[0][3], globalinputdata[1][3], globalinputdata[2][3], globalinputdata[3][3], globalinputdata[4][3]];
- 				console.log(justseniordata);
+				var color = d3.scale.category10();
 
-				// Define scales
+				// Define scales -- need to figure these out since they are messed up.
 				var xscale =d3.scale.ordinal()
-					.domain(d3.range(justseniordata.length))
-					.rangeRoundBands([0,w], 0.5);
+					.domain(d3.range(chartdata[0].length))
+					.rangeRoundBands([0,w], 0.02);
 				var yscale = d3.scale.linear()
-					.domain([0, d3.max(justseniordata)])
+					.domain([0, d3.max(chartdata, function(d) {
+							return d3.max(d,function(d) {
+								return d.y0+d.y;
+							});
+					})
+					])
 					.range([0,h]);
-
-				// Append Circle with mouseover
-				svg.selectAll("rect")
-					.data(justseniordata)
-					.enter()
-					.append("rect")
-					.attr("x", function(d, i) {
-						return xscale(i);
-					})
-					.attr("y", function(d) {
-						return h-yscale(d);
-					})
-					.attr("width", xscale.rangeBand())
-					.attr("height", function(d) {
-			   			return yscale(d);
-			   		})
-			   		.attr("fill", "red");
+					
 
 				//Define X axis
 				var xAxis = d3.svg.axis()
@@ -106,6 +102,34 @@
 					.orient("left")
 					.ticks(5);
 
+				var svg = d3.select("div")
+					.append("svg")
+					.attr("width",w)
+					.attr("height", h)
+					.append("g")
+
+			   	var bars = svg.selectAll("g")
+			   		.data(chartdata)
+			   		.enter()
+			   		.append("g")
+			   		.style("fill",function(d,i) {
+			   			return color(i);
+			   		});
+
+			   	var rects = bars.selectAll("rect")
+			   		.data(chartdata)
+			   		.enter()
+			   		.append("rect")
+			   		.attr("x", function(d,i) {
+						return xscale(d.x);
+					})
+					.attr("y", function(d) {
+						return h-yscale(d.y0+d.y);
+					})
+					.attr("width", xscale.rangeBand())
+					.attr("height", function(d) {
+			   			return yscale(d.y);
+			   		})
 			   	// Append labels,scales, etc to chart
 			   	svg.append("text")
 			   		.attr("class","label")
@@ -121,7 +145,7 @@
 			   		.attr("dy", ".25em")
 			   		.attr("x", 0-(h/2))
 			   		.attr("transform", "rotate (-90)")
-			   		.text("Number of Seniors - but scale is inverted");
+			   		.text("Numbers of Students");
 
 			   	// Create X Axis Group
 			   	svg.append("g")
@@ -135,7 +159,38 @@
 					.attr("transform", "translate("+padding+",0)")
 			   		.call(yAxis);
 
-/*	No need for legend label since only one value. From HW3.
+
+
+			   	// Append labels,scales, etc to chart
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","middle")
+			   		.attr("x",w/2)
+			   		.attr("y",h)
+			   		.text("Universities A-F (0-4)");
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","end")
+			   		.attr("y",padding/4)
+			   		.attr("dy",".25em")
+			   		.attr("x",0-(h/2))
+			   		.attr("transform","rotate (-90)")
+			   		.text("Number Sutdents per Class");
+
+			   	// Create X Axis Group
+			   	svg.append("g")
+			   		.attr("class","axis")
+			   		.attr("transform","translate(0,"+(h-padding)+")")
+			   		.call(xAxis);
+
+			   	// Create Y Axis group
+			   	svg.append("g")
+			   		.attr("class", "axis")
+					.attr("transform","translate("+padding+",0)")
+			   		.call(yAxis);
+
+/*	Add legend once I get this working.From HW3.
 			   	svg.append("rect")
 			   		.attr("class","label")
 			   		.attr("x", xscale(220))
@@ -172,7 +227,7 @@
 /*
 
 
-				// Append Ellipse with mouseover
+				// use this from HW for mouse over extra credit in 3.3.
 				svg.selectAll("ellipse")
 					.data(gradedata)
 					.enter()
@@ -210,32 +265,8 @@
 						d3.select("#tooltip").remove();
 			   		});
 
-*/			   		
-// Commented part to show text next to every data point. Total mess to view.
-/*				svg.selectAll("text")
-			   		.data(gradedata)
-			   		.enter()
-			   		.append("text")
-			   		.text(function(d) {
-						return d["Country or other education system"];
-					})
-			   		.attr("x", function(d) {
-						return xscale(d["Mathmatics instructional time hours per year"]);			 
-					})
-			   		.attr("y", function(d) {
-						return yscale(d["Mathematics average score\\2\\"]);
-					})
-			   		.attr("font-family", "ubuntu")
-			   		.attr("font-size", "10px")
-			   		.attr("fill", "black");
-*/
+		   		
 
-/*			   		.on("mouseout", function(d) {
-				   		d3.select(this)
-							.attr("fill", "rgb(0, 0, " + (d * 10) + ")");
-			   		});
-*/
-/*
 			   	// Create X Axis Group
 			   	svg.append("g")
 			   		.attr("class","axis")
