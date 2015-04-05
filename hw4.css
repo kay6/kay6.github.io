@@ -1,0 +1,34 @@
+body {
+/*	background-color:black;  */
+	font-family="Ubuntu, Sans-Serif"
+	color:white;
+	margin: auto;
+	position: relative;
+	width: 960px;
+}
+
+form {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+}
+
+// uncomment and fix the append line to put form in right place.
+.treemap {
+    line-height:30px;
+    background-color:white;
+    height:800px;
+    width:1000px;
+    float:center;
+	padding:5px;
+}
+
+
+.node {
+	border: solid 1px white;
+	font: 10px "Ubuntu", Sans-Serif;
+	line-height: 12px;
+	overflow: hidden;
+	position: absolute;
+	text-indent: 2px;
+}

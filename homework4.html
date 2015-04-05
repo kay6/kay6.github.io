@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="hw4.css"/>
+		<title>Andy IE59000 - Homework 4 - National Coffee Business</title>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	</head>
+	<body>
+		<center><a href="http://DistantCollaborators.github.io" target="_blank">
+		<svg width="400" height="80">
+			<rect width="400" height="70" rx="20" ry="20" style="fill:#848482"></rect>
+			<rect x="5" y="5" rx="20" ry="20" width="390" height="60" style="fill:white; stroke:black; stroke-width:2"></rect>
+			<text x="50" y="35" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">IE59000 Homework 4 - Andy Kay</text>
+			<text x="105" y="55" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">Distant Collaborator</text>
+		</svg></a>
+		</center>
+
+		<center><svg width="390" height="50">
+			<rect width="380" height="40" x="5" y="5" style="fill:grey; stroke:white; stroke-width:2"></rect>
+			<text x="35" y="32" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">National Coffee Business Treemap</text>
+		</svg></center>
+
+		<center><div class="treemap">
+			<form>
+				<label><input type="radio" name="mode" value="sales" checked> Sales</label>
+				<lavel><input type="radio" name="mode" value="profit"> Profit</lavel>
+			</form>
+		</div></center> 
+
+		<br>
+
+		<script>
+			// Source 1: http://bl.ocks.org/mbostock/4063582
+			// Source 2: http://bl.ocks.org/phoebebright/raw/3176159/
+
+			// build dimensions of treemap and color map. can use 20 or 20c
+			var margin = {top:40, right:10, bottom:10, left:10},
+				w = 960 - margin.left - margin.right,
+				h = 500 - margin.top - margin.bottom,
+				color = d3.scale.category20b();
+
+			// Build treemap layout.
+			// .sticky sets if the treemap is persistant or not
+			var treemap = d3.layout.treemap()
+				.size([w,h])
+				.sticky(true)
+				.children(function(d) {
+					return d.values;
+				})
+				.value(function(d) {
+					return +d.sales;
+				});
+
+			//var div = d3.select("body").append("div")
+			var div = d3.select("div")
+				.style("position", "relative")
+				.style("width", (w+margin.left+margin.right)+"px")
+				.style("height", (h+margin.top+margin.bottom)+"px")
+				.style("left", margin.left +"px")
+				.style("top", margin.top + "px");
+
+			d3.csv("https://hivelab.org/static/coffee.csv", function (coffeedata) {
+				console.log(coffeedata);
+				var nested = d3.nest()
+					.key(function(d) {
+						return d.region;
+					})
+					.key(function(d) {
+						return d.state;
+					})
+					.key(function(d) {
+						return d.category;
+					})
+					.key(function(d) {
+						return d.caffeination;
+					})
+					.key(function(d) {
+						return d.sales;
+					})
+					.entries(coffeedata)
+					console.log(nested);
+
+				var node=div.datum(nested).selectAll(".node")
+					.data(treemap.nodes)
+					.enter()
+					.append("div")
+					.attr("class","node")
+					.call(position)
+					.style("background", function(d) {
+						return d.children ? color(d.name) :null;
+					})
+					.text(function (d) {
+						return d.children ? null : d.name;
+					})
+					console.log(node);
+
+/*
+				d3.selectAll("input").on("change", function change() {
+					var value = this.value === "profit"
+					? function() {
+						return 1;
+					}
+					: function(d) {
+						return d.sales;
+					};
+					node.data(treemap.value(value).nodes)
+					.transition()
+					.duration(3000)
+					.call (position);
+				});
+*/
+
+			});
+
+			function position() {
+				this.style ("left", function (d) {
+					return d.x + "px";
+				})
+				.style("top", function (d) {
+					return d.y + "px";
+				})
+				.style("width", function (d) {
+					return Math.max(0,d.dx - 1) + "px";
+				})
+				.style("height", function (d) {
+					return Math.max(0, d.dy -1) + "px";
+				});
+			}
+
+
+
+
+
+		</script>
+	</body></center>
+</html>
