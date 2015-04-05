@@ -1,5 +1,5 @@
 body {
-/*	background-color:black;  */
+	background-color:black;  
 	font-family="Ubuntu, Sans-Serif"
 	color:white;
 	margin: auto;
@@ -7,28 +7,32 @@ body {
 	width: 960px;
 }
 
-form {
-	position: absolute;
-	left: 10px;
-	top: 10px;
-}
-
-/ uncomment and fix the append line to put form in right place.
-.treemap {
+/* uncomment and fix the append line to put form in right place. */
+.treemapper {
     line-height:30px;
     background-color:white;
     height:800px;
     width:1000px;
     float:center;
 	padding:5px;
+
+
+form {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	background-color:white;
 }
 
-//  Putes white border around treemap pieces and sets text info
+/*  Putes white border around treemap pieces and sets text info */
 .node {
 	border: solid 1px white;
-	font: 10px "Ubuntu", Sans-Serif;
+	font: 10px sans-serif;
 	line-height: 12px;
 	overflow: hidden;
 	position: absolute;
 	text-indent: 2px;
+}
+
+
 }

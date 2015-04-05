@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<link type="text/css" rel="stylesheet" href="hw4.css"/>
+
 		<title>Andy IE59000 - Homework 4 - National Coffee Business</title>
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
@@ -21,7 +22,7 @@
 			<text x="35" y="32" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">National Coffee Business Treemap</text>
 		</svg></center>
 
-		<center><div class="treemap">
+		<center><div class="treemapper">
 			<form>
 				<label><input type="radio" name="mode" value="sales" checked> Sales</label>
 				<label><input type="radio" name="mode" value="profit"> Profit</label>
@@ -82,7 +83,7 @@
 					.append("div")
 					.attr("class","node")
 					.call(position)
-					.style("background", function(d) {
+					.style("background", function (d) {
 						return d.children ? color(d.name) :null;
 					})
 					.text(function (d) {
