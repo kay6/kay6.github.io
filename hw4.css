@@ -13,7 +13,7 @@ form {
 	top: 10px;
 }
 
-// uncomment and fix the append line to put form in right place.
+/ uncomment and fix the append line to put form in right place.
 .treemap {
     line-height:30px;
     background-color:white;
@@ -23,7 +23,7 @@ form {
 	padding:5px;
 }
 
-
+//  Putes white border around treemap pieces and sets text info
 .node {
 	border: solid 1px white;
 	font: 10px "Ubuntu", Sans-Serif;

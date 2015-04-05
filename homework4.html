@@ -24,7 +24,7 @@
 		<center><div class="treemap">
 			<form>
 				<label><input type="radio" name="mode" value="sales" checked> Sales</label>
-				<lavel><input type="radio" name="mode" value="profit"> Profit</lavel>
+				<label><input type="radio" name="mode" value="profit"> Profit</label>
 			</form>
 		</div></center> 
 
@@ -37,8 +37,9 @@
 			// build dimensions of treemap and color map. can use 20 or 20c
 			var margin = {top:40, right:10, bottom:10, left:10},
 				w = 960 - margin.left - margin.right,
-				h = 500 - margin.top - margin.bottom,
-				color = d3.scale.category20b();
+				h = 500 - margin.top - margin.bottom;
+
+			color = d3.scale.category20b();
 
 			// Build treemap layout.
 			// .sticky sets if the treemap is persistant or not
@@ -55,8 +56,8 @@
 			//var div = d3.select("body").append("div")
 			var div = d3.select("div")
 				.style("position", "relative")
-				.style("width", (w+margin.left+margin.right)+"px")
-				.style("height", (h+margin.top+margin.bottom)+"px")
+				.style("width", (w + margin.left + margin.right) +"px")
+				.style("height", (h + margin.top + margin.bottom) +"px")
 				.style("left", margin.left +"px")
 				.style("top", margin.top + "px");
 
@@ -68,12 +69,6 @@
 					})
 					.key(function(d) {
 						return d.state;
-					})
-					.key(function(d) {
-						return d.category;
-					})
-					.key(function(d) {
-						return d.caffeination;
 					})
 					.key(function(d) {
 						return d.sales;
@@ -95,7 +90,7 @@
 					})
 					console.log(node);
 
-/*
+
 				d3.selectAll("input").on("change", function change() {
 					var value = this.value === "profit"
 					? function() {
@@ -106,10 +101,10 @@
 					};
 					node.data(treemap.value(value).nodes)
 					.transition()
-					.duration(3000)
+					.duration(2000)
 					.call (position);
 				});
-*/
+
 
 			});
 
