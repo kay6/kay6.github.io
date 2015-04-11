@@ -22,62 +22,74 @@
 			<text x="35" y="32" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">National Coffee Business Treemap</text>
 		</svg></center>
 
-		<center><div class="treemapper">
+		<center>
 			<form>
 				<label><input type="radio" name="mode" value="sales" checked> Sales</label>
 				<label><input type="radio" name="mode" value="profit"> Profit</label>
 			</form>
-		</div></center> 
 
-		<br>
+		<p>Treemap of Coffee sales or profits (clickable) for 10 states (by color).</p><p>Of interest, note how some states have higher sales but lower profits or vice versa.</p</center>
 
 		<script>
 			// Source 1: http://bl.ocks.org/mbostock/4063582
 			// Source 2: http://bl.ocks.org/phoebebright/raw/3176159/
+			// Piazza Posts
+			// Many Many others in addition to presented in class
 
 			// build dimensions of treemap and color map. can use 20 or 20c
 			var margin = {top:40, right:10, bottom:10, left:10},
 				w = 960 - margin.left - margin.right,
-				h = 500 - margin.top - margin.bottom;
-
-			color = d3.scale.category20b();
+				h = 500 - margin.top - margin.bottom,
+				color = d3.scale.category20b();
 
 			// Build treemap layout.
 			// .sticky sets if the treemap is persistant or not
 			var treemap = d3.layout.treemap()
 				.size([w,h])
 				.sticky(true)
-				.children(function(d) {
-					return d.values;
-				})
 				.value(function(d) {
-					return +d.sales;
+					return d.sales;
 				});
 
-			//var div = d3.select("body").append("div")
-			var div = d3.select("div")
+			var div = d3.select("body").append("div")
 				.style("position", "relative")
 				.style("width", (w + margin.left + margin.right) +"px")
 				.style("height", (h + margin.top + margin.bottom) +"px")
 				.style("left", margin.left +"px")
 				.style("top", margin.top + "px");
 
-			d3.csv("https://hivelab.org/static/coffee.csv", function (coffeedata) {
+			d3.csv("https://hivelab.org/static/coffee.csv", function(coffeedata) {
+				console.log("raw data");
 				console.log(coffeedata);
-				var nested = d3.nest()
+
+				// Source: http://stackoverflow.com/questions/17416186/d3-nest-key-and-values-conversion-to-name-and-children
+				// build the hierarchy with d3.nest()
+				var nested = { "key": "CoffeeRoot", "values": d3.nest()
 					.key(function(d) {
 						return d.region;
 					})
 					.key(function(d) {
 						return d.state;
 					})
-					.key(function(d) {
-						return d.sales;
-					})
-					.entries(coffeedata)
-					console.log(nested);
+					.entries(coffeedata)};
 
-				var node=div.datum(nested).selectAll(".node")
+				console.log("nested data");
+				console.log(nested);
+
+				// Source: http://stackoverflow.com/questions/17416186/d3-nest-key-and-values-conversion-to-name-and-children
+				// Complicated object remap into the proper array object for treemap.nodes
+				var repackage = {"name":"remap-ddata", "children":
+					nested.values.map (function(region){
+						return {"name":region.key, "children":
+							region.values.map (function(state){
+								return {"name": state.key, "children": state.values};})
+						};
+					})
+				};
+				console.log("rapackaged via .map data");
+				console.log(repackage);
+
+				var node=div.datum(repackage).selectAll(".node")
 					.data(treemap.nodes)
 					.enter()
 					.append("div")
@@ -89,16 +101,16 @@
 					.text(function (d) {
 						return d.children ? null : d.name;
 					})
+					console.log("nodes");
 					console.log(node);
 
 
 				d3.selectAll("input").on("change", function change() {
-					var value = this.value === "profit"
-					? function() {
-						return 1;
-					}
-					: function(d) {
-						return d.sales;
+					var value = this.value === "profit" ? function() {
+							return 1;
+						}
+						: function(d) {
+							return d.sales;
 					};
 					node.data(treemap.value(value).nodes)
 					.transition()
@@ -121,9 +133,8 @@
 				})
 				.style("height", function (d) {
 					return Math.max(0, d.dy -1) + "px";
-				});
+				})
 			}
-
 
 
 
