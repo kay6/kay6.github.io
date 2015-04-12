@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="exam1.css"/>
+		<title>Andy IE59000 - Homework 4 Extra Credit (Exam 1)- Question 3.3</title>
+
+<!-- d3.js, Jquery and Ajax Scripts -->
+
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+
+	</head>
+	<body>
+
+		<!-- Page Title Bar -->
+		<center>
+		<svg width="400" height="80">
+			<rect width="400" height="70" rx="20" ry="20" style="fill:#848482"></rect>
+			<rect x="5" y="5" rx="20" ry="20" width="390" height="60" style="fill:white; stroke:black; stroke-width:2"></rect>
+			<text x="100" y="35" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">IE59000 - Andy Kay</text>
+			<text x="50" y="55" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black">Homework 4 Exam 3.3 Extra Credit</text>
+		</svg>
+		</center><br>
+
+		<!-- Homework Title Bar -->
+		<center><svg width="430" height="100">
+			<rect width="410" height="50" x="5" y="5" style="fill:lightgrey; stroke:white; stroke-width:2"></rect>
+			<text x="40" y="32" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black"> Comparison of numbers of IE students</text>
+		</svg></center>
+
+		<!-- Div for Chart -->
+		<center><div class="chart">
+		</div></center> 
+
+		<br>
+
+
+		<a href="https://hivelab.org/static/exam1.json" target="_blank"><p align="right">Hive Lab JSON file</p></a>
+
+		<!-- D3.js Chart Script -->
+		<!-- Source for study: http://bl.ocks.org/mbostock/3886208 -->
+		<!-- Source for study: http://codepen.io/chris-creditdesign/pen/xEnbv -->
+		<script type="text/javascript">
+
+			var chartdata;
+			var margin = {top: 20, right: 20, bottom: 30, left: 40},
+			w = 750 - margin.left - margin.right,
+			h = 500 - margin.top - margin.bottom,
+			padding = 20;
+
+			var x = d3.scale.ordinal()
+				.rangeRoundBands([0,w], .1);
+
+			var y = d3.scale.linear()
+				.rangeRound([h,0]);
+
+			var color = d3.scale.linear()
+				.rangeRound(["red","yellow","green","blue"]);
+
+			var xAxis = d3.svg.axis()
+				.scale(x)
+				.orient("bottom")
+				.ticks(5);
+
+			var yAxis = d3.svg.axis()
+				.scale(y)
+				.orient("left")
+				.ticks(5);
+
+			//Var for svg chart build
+			var svg = d3.select("body")
+					.append("svg")
+					.attr("width",w + margin.left + margin.right)
+					.attr("height", h + margin.top + margin.bottom)
+					.append("g")
+					.attr("transform", "translate(" + margin.left +"," + margin.top +")");
+
+			//New approach than 3.1. Couldn't get it to work for 3.1.
+			d3.json("https://hivelab.org/static/exam1.json", function(data) {
+				console.log("raw data read")
+				console.log(data);
+				console.log(data.length);
+
+//				color.domain(d3.keys(data[0]).filter(function(key) {
+//					return key !== "Year"
+//				}))   Use fill instead of color.
+
+				/*Try a push method
+				for (var i=0; i<data.length; i++) {
+					freshman.push(data[0][""+)
+				} 
+
+				data.forEach(function(d) {
+					var y0=0;
+					d.years = color.domain().map(function(grade) {
+						return {grade: grade, y0:y0,y1:y0 += +d[name]};
+					})
+					d.total = d.years[d.years.length -1].y1;
+				});
+				console.log(years);
+				console.log(total);
+				*/
+
+				//.map method failure
+				chartdata=data.map(function(d) {
+					return [{x:0,y:d["University A"]},
+							{x:1,y:d["University B"]},
+							{x:2,y:d["University C"]},
+							{x:3,y:d["University D"]},
+							{x:4,y:d["University E"]},
+							d["Year"]];
+				});
+				console.log("Chart Data Mapped");
+				console.log(chartdata);
+
+				var color = d3.scale.category10();
+
+				// Define scales -- need to figure these out since they are messed up.
+				var xscale =d3.scale.ordinal()
+					.domain(d3.range(chartdata[0].length))
+					.rangeRoundBands([0,w], 0.02);
+				var yscale = d3.scale.linear()
+					.domain([0, d3.max(chartdata, function(d) {
+							return d3.max(d,function(d) {
+								return d.y0+d.y;
+							});
+					})
+					])
+					.range([0,h]);
+
+				var svg = d3.select("div")
+					.append("svg")
+					.attr("width",w)
+					.attr("height", h)
+					.append("g")
+
+			   	var bars = svg.selectAll("g")
+			   		.data(chartdata)
+			   		.enter()
+			   		.append("g")
+			   		.style("fill",function(d,i) {
+			   			return color(i);
+			   		});
+
+			   	var rects = bars.selectAll("rect")
+			   		.data(chartdata)
+			   		.enter()
+			   		.append("rect")
+			   		.attr("x", function(d) {
+						return xscale(d);
+					})
+					.attr("y", function(d) {
+						return h-yscale(d);
+					})
+					.attr("width", xscale.rangeBand())
+					.attr("height", h);
+			   	// Append labels,scales, etc to chart
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","middle")
+			   		.attr("x", w/2)
+			   		.attr("y", h)
+			   		.text("Universities A-F (0-4)");
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","end")
+			   		.attr("y", padding/4)
+			   		.attr("dy", ".25em")
+			   		.attr("x", 0-(h/2))
+			   		.attr("transform", "rotate (-90)")
+			   		.text("Numbers of Students");
+
+			   	// Create X Axis Group
+			   	svg.append("g")
+			   		.attr("class","axis")
+			   		.attr("transform", "translate(0, "+(h-padding)+")")
+			   		.call(xAxis);
+
+			   	// Create Y Axis group
+			   	svg.append("g")
+			   		.attr("class", "axis")
+					.attr("transform", "translate("+padding+",0)")
+			   		.call(yAxis);
+
+
+
+			   	// Append labels,scales, etc to chart
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","middle")
+			   		.attr("x",w/2)
+			   		.attr("y",h)
+			   		.text("Universities A-F (0-4)");
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","end")
+			   		.attr("y",padding/4)
+			   		.attr("dy",".25em")
+			   		.attr("x",0-(h/2))
+			   		.attr("transform","rotate (-90)")
+			   		.text("Number Sutdents per Class");
+
+			   	// Create X Axis Group
+			   	svg.append("g")
+			   		.attr("class","axis")
+			   		.attr("transform","translate(0,"+(h-padding)+")")
+			   		.call(xAxis);
+
+			   	// Create Y Axis group
+			   	svg.append("g")
+			   		.attr("class", "axis")
+					.attr("transform","translate("+padding+",0)")
+			   		.call(yAxis);
+
+/*	Add legend once I get this working.From HW3.
+			   	svg.append("rect")
+			   		.attr("class","label")
+			   		.attr("x", xscale(220))
+			   		.attr("y", yscale(260))
+			   		.attr("width", 20)
+			   		.attr("height", 10)
+			   		.attr("fill", "red");
+
+			   	svg.append("rect")
+			   		.attr("class","label")
+			   		.attr("x", xscale(220))
+			   		.attr("y", yscale(250))
+			   		.attr("width", 20)
+			   		.attr("height", 10)
+			   		.attr("fill", "blue");	
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","left")
+			   		.attr("x", xscale(230))
+			   		.attr("y", yscale(255))
+			   		.text("Mathmatics");
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","left")
+			   		.attr("x", xscale(230))
+			   		.attr("y", yscale(243))
+			   		.text("Science");
+*/
+
+			});
+
+/*
+
+
+				// use this from HW for mouse over extra credit in 3.3.
+				svg.selectAll("ellipse")
+					.data(gradedata)
+					.enter()
+					.append("ellipse")
+					.attr("cx", function(d) {
+						return xscale(d["Science instructional time hours per year"])
+					})
+					.attr("cy", function(d) {
+						return yscale(d["Science average score\\2\\"]);
+					})
+					.attr("rx", function(d) {
+						return (15./1200.)*d["Total instructional hours per year"];
+					})
+					.attr("ry", function(d) {
+						return (15./1200.)*d["Total instructional hours per year"];
+					})
+					.attr("fill", function(d) {
+						if (d["Science instructional time hours per year"]=="") {return "none"}
+						else { return "blue"}
+					})
+
+					.on("mouseover", function (d) {
+						console.log(d)
+			   			svg.append("text")
+			   			.attr("id","tooltip")
+			   			.text(d["Country or other education system"]+":  "+d["Science instructional time hours per year"]+" hrs/yr of Science out of "+d["Total instructional hours per year"]+" total teaching hrs/yr.")
+			   			.attr("x", 0)
+			   			.attr("y", 20)
+			   			.attr("font-family", "ubuntu")
+			   			.attr("font-size", "20px")
+			   			.attr("fill", "black");
+ 					})
+ 					.on("mouseout", function(d) {
+					//Remove the tooltip
+						d3.select("#tooltip").remove();
+			   		});
+
+		   		
+
+			   	// Create X Axis Group
+			   	svg.append("g")
+			   		.attr("class","axis")
+			   		.attr("transform", "translate(0, "+(h-padding)+")")
+			   		.call(xAxis);
+
+			   	// Create Y Axis group
+			   	svg.append("g")
+			   		.attr("class", "axis")
+					.attr("transform", "translate("+padding+",0)")
+			   		.call(yAxis);
+
+			   	// Append labels,scales, etc to chart
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","middle")
+			   		.attr("x", w/2)
+			   		.attr("y", h)
+			   		.text("Total Instructional Time (Hours/Year)");
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","end")
+			   		.attr("y", padding/4)
+			   		.attr("dy", ".25em")
+			   		.attr("x", 0-(h/2))
+			   		.attr("transform", "rotate (-90)")
+			   		.text("Average Test Score");
+
+			   	svg.append("rect")
+			   		.attr("class","label")
+			   		.attr("x", xscale(220))
+			   		.attr("y", yscale(260))
+			   		.attr("width", 20)
+			   		.attr("height", 10)
+			   		.attr("fill", "red");
+
+			   	svg.append("rect")
+			   		.attr("class","label")
+			   		.attr("x", xscale(220))
+			   		.attr("y", yscale(250))
+			   		.attr("width", 20)
+			   		.attr("height", 10)
+			   		.attr("fill", "blue");	
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","left")
+			   		.attr("x", xscale(230))
+			   		.attr("y", yscale(255))
+			   		.text("Mathmatics");
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","left")
+			   		.attr("x", xscale(230))
+			   		.attr("y", yscale(243))
+			   		.text("Science");
+
+			   	svg.append("text")
+			   		.attr("class","label")
+			   		.attr("text-anchor","left")
+			   		.attr("x", xscale(210))
+			   		.attr("y", yscale(230))
+			   		.attr("font-family", "ubuntu")
+			   		.attr("font-size", "9px")
+			   		.text("Circles to scale in total instructional hrs/yr.")
+			});
+*/
+		</script>
+
+	</body></center>
+</html>
