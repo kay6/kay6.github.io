@@ -28,6 +28,8 @@
 			<text x="40" y="32" font-family="Ubuntu, Sans-Serif" font-size="20" fill="black"> Comparison of numbers of IE students</text>
 		</svg></center>
 
+		<p>Unfortunately I ran out of time to complete this task since last HW was the priority. I spent all of the last two weekends since no time was avaialble during the weeks because of being out of town for work. Like previous homework and exam 1, 80+% of the time was spent on code to properly manipulate the source data arrays/objects and how it fits into D3.js application.</p>
+
 		<!-- Div for Chart -->
 		<center><div class="chart">
 		</div></center> 
@@ -75,21 +77,35 @@
 					.append("g")
 					.attr("transform", "translate(" + margin.left +"," + margin.top +")");
 
-			//New approach than 3.1. Couldn't get it to work for 3.1.
+			var schools = ["University A","University B","University C","University D","University E"];
+			var freshman = [];
+			var sophomore = [];
+			var junior = [];
+			var senior = [];
+
 			d3.json("https://hivelab.org/static/exam1.json", function(data) {
 				console.log("raw data read")
 				console.log(data);
 				console.log(data.length);
 
+				// Try to push the data map that I need
+				for (var i=0; i<5; i++) {
+					freshman.push(data[0][""+schools[i]+""]);
+					sophomore.push(data[1][""+schools[i]+""]);
+					junior.push(data[2][""+schools[i]+""]);
+					senior.push(data[3][""+schools[i]+""]);
+				}
+				console.log("freshman:"+freshman);
+				console.log("Sophomore:"+sophomore);
+				console.log("Junior:"+junior);
+				console.log("Senior:"+senior);
+
 //				color.domain(d3.keys(data[0]).filter(function(key) {
 //					return key !== "Year"
 //				}))   Use fill instead of color.
 
-				/*Try a push method
-				for (var i=0; i<data.length; i++) {
-					freshman.push(data[0][""+)
-				} 
-
+				
+				/* forEach method attempt failed.
 				data.forEach(function(d) {
 					var y0=0;
 					d.years = color.domain().map(function(grade) {
@@ -101,7 +117,7 @@
 				console.log(total);
 				*/
 
-				//.map method failure
+				/*.map method failure
 				chartdata=data.map(function(d) {
 					return [{x:0,y:d["University A"]},
 							{x:1,y:d["University B"]},
@@ -112,6 +128,8 @@
 				});
 				console.log("Chart Data Mapped");
 				console.log(chartdata);
+				*/
+
 
 				var color = d3.scale.category10();
 
