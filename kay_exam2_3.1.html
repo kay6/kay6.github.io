@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Andy IE59000 - Exam2 - Question 3.1</title>
+		<style type="text/css">
+
+			tr {
+				color:black;
+				font-family:"Times New Roman", Times, Serif;
+				font-size:1em;
+    			vertical-align: text-top;
+    		}
+
+    		th {
+    			background-color: lightgray;
+
+    		}
+
+		</style>
+<!-- d3.js, Jquery and Ajax Scripts -->
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+	</head>
+	<body>
+
+		<center><h1> Table of Items </h1></center>
+		<center><p>Of note, 80% of the time spent on this problem and 3.2 was torward actually getting the data in the correct format, eliminating bugs and displaying it properly. Highlighting, clicking and sorting was only possible during the last few hours. It is unfortunate since that is actually the fun part of D3 and this class. Total time spent on this exam was 6 hours for writing and 10+ hours for coding. Still need to work the logic for a whole row but no time left.</p>
+    
+    		<center><table>
+      			<thead></thead>
+      			<tbody></tbody>
+    		</table></center>
+
+		<a href="http://hivelab.org/static/exam2.json" target="_blank"><p align="right">Hive Lab Exam 2 JSON file</p></a>
+
+		<!-- D3.js Chart Script -->
+		<script type="text/javascript">
+			// Source1: is Interactive Data Visulization - Scott Murray - Class Text Book
+			// Source2: https://github.com/alignedleft/d3-book
+			// Source2: http://stackoverflow.com/questions/19114927/d3-js-highlighting-a-row-in-table
+			// Source3: http://bl.ocks.org/biovisualize/1226718
+			// Source4: https://gist.github.com/LevelbossMike/2623382
+
+			//Read JSON data file
+			d3.json("https://hivelab.org/static/exam2.json", function(data) {
+				console.log(data);
+				console.log(d3.keys(data[0]));
+				header=Object.keys(data[0]);
+				console.log(header);
+				console.log("Show header row: "+header);
+
+				// Create the header
+				var thead = d3.select("thead")
+					.selectAll("th")
+					.data(header)
+					.enter()
+					.append("th")
+					.text(function(d) {
+						return d;
+					})
+					.style("border", "1px solid black")
+					.attr("style", "text-align: right")
+					.attr("style","padding: 2px 20px");
+
+				// Create the rows for each object
+				var rows = d3.select("tbody")
+					.selectAll("tr")
+					.data(data)
+					.enter()
+					.append("tr");
+
+				//Create a cell in each row		
+				var cell = rows.selectAll("td")
+					.data(function(d) {
+						return d3.values(d)
+           			})
+					.enter()
+					.append("td")
+					.text(function(d) {
+ 						return d;
+					})
+					.style("border", "1px solid black")
+					.attr("style", "text-align: right")
+			    	.attr("style","padding: 2px 20px")
+			    	.on("mouseover", function(d) {
+			   			d3.select(this)
+			   				.attr("style", "background-color: yellow")
+			   		})
+			   		.on("mouseout", function(d) {
+				   		d3.select(this)
+				   			.transition()
+				   			.duration(250)
+							.attr("style", "background-color: white;")
+							.style("border", "1px solid black")
+							.attr("style", "text-align: right")
+			    			.attr("style","padding: 2px 20px")
+			   		})
+			   		.on("click", function(d) {
+			   			d3.select(this)
+			   				.attr("style", "background-color: green")
+			   		})
+			   		.on("mouseout", function(d) {
+				   		d3.select(this)
+				   			.transition()
+				   			.duration(250)
+							.attr("style", "background-color: white;")
+							.style("border", "1px solid black")
+							.attr("style", "text-align: right")
+			    			.attr("style","padding: 2px 20px")
+			   		});
+
+
+			});
+
+
+		</script>
+
+	</body>
+</html>
