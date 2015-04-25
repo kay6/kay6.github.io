@@ -64,6 +64,7 @@
 						.enter()
 						.append("tr")
 						.sort(function (a,b) {
+							// check logic. something may be messed up.
 							return a == null || b == null ? 0: compare(a[name],b[name]);
 						});
 
@@ -113,7 +114,7 @@
 
 			});
 
-
+			// add in all the mouseover, mouseout and click factors once this works.
 
 		</script>
 
