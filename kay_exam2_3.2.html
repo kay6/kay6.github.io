@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Andy IE59000 - Exam2 - Question 3.1</title>
+		<title>Andy IE59000 - Exam2 - Question 3.2</title>
 		<style type="text/css">
 			/* in the interest of saving time. I will only add this type of detail if time permits */
 
@@ -11,27 +11,20 @@
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 	</head>
-	<body>
+	<body><center>
 
-		<center><h1> Table of Items </h1></center>
-
-
-		<center><table>
-    		<thead></thead>
-    		<tbody></tbody>
-		</table></center>
-
-		<br>
+		<center><h1> Table of Sortable Items </h1></center>
+		<center><p>Of note, in the code I still need to figure out why my functions are not building the table and add the code for the highlighting. Tried to get sorting working but was unable since I couldn't get the table built using functions.</p></center>
 
 		<a href="http://hivelab.org/static/exam2.json" target="_blank"><p align="right">Hive Lab Exam 2 JSON file</p></a>
 
 		<!-- D3.js Chart Script -->
 		<script type="text/javascript">
-			// Read in json data using d3.js
 			// Source1: is Interactive Data Visulization - Scott Murray - Class Text Book
 			// Source2: https://github.com/alignedleft/d3-book
 			// Source2: http://stackoverflow.com/questions/19114927/d3-js-highlighting-a-row-in-table
 			// Source3: http://bl.ocks.org/biovisualize/1226718
+			// Source4: https://gist.github.com/LevelbossMike/2623382
 
 			// Variables
 			var header = [];
@@ -45,23 +38,22 @@
 				console.log("Show header row: "+header);
 
 
-				// Table function
-				function tablemaker(data) {
-					console.log("data passed as  "+data);
+				// Table function to facilitate sorting
+				function tablesorter(name) {
+					console.log("data passed as  "+name);
+					d3.select("tbody")
+						.selectAll("tr")
+						.remove();
 
-				/*	var table = d3.select ("body")
-						.append("table")
-						thead = table.append("thead"),
-						tbody = table.append("tbody");  */
-
-					// Append the header row
-					var th = d3. select("thead")
-						.selectAll("th")
-						.data(header)
+					// Create Header
+					var th =d3.select("thead")
+						.data(datatoArray(data[0]))
 						.enter()
 						.append("th")
+						.attr("onclick", function (d,i) {
+							return "tablesorter('" +d[0] + "');";
+						})
 						.text(function(d) {
-							console.log(d[0]);
 							return d[0];
 						});
 
@@ -70,63 +62,57 @@
 						.selectAll("tr")
 						.data(data)
 						.enter()
-						.append("tr");
+						.append("tr")
+						.sort(function (a,b) {
+							return a == null || b == null ?0: compare(a[name],b[name]);
+						});
 
 					//Create a cell in each row
-					var cell = rows.selectAll("td")
-					//	.data(function(d) {
-					//		return dataArray(d);
-					//		})
+					var cells = rows.selectAll("td")
+						.data(function(d) {
+            				return datatoArray(d);
+        				})
 						.enter()
 						.append("td")
+						.attr("onclick", function (d,i) {
+							return "tablesorter('"+d[0]+"');";
+						})
 						.text(function(d) {
 							return d[1];
 						});
+
 				}
 
-				// Funtion to build array for data
-				function dataArray(input) {
-					console.log("running dataArray");
-					var pain = new Array();
+				function fixKey(a,b) {
+					return [a,b];
+				}
+
+				function compare (c,d) {
+					c = c.toLowerCase();
+					d = d.toLowerCase();
+					return c>d ? 1 : c == d ? 0 : -1;
+				}
+
+
+				function datatoArray(input) {
+					var back = new Array();
 					var key;
-					console.log("input passed is "+input);
 					for (key in input) {
 						if (input.hasOwnProperty(key)) {
-							pain.push(keyPainfix(key, input[key]));
+							back.push(fixKey(key, input[key]));
 						}
 					}
-					console.log("Pain is "+pain);
-					return pain;
+					return back;
 				}
 
-				// Return the right values
-				// Fix pain
-				function keyPainfix (k, r) {
-					console.log("running keyPainfix");
-					return [k, r];
-				};
 
-				/* add in the fun parts with mouseover and transitions for it.
-				// Need to get the rest working first
-				.on(mouseover, function() {
-					d3.select(this)
-						......
-						.transition()
-						.duration(100)
-						.......
-				}
-				.on(mouseout, function() {
-					d3.select(this)
-						......
-				}  */
-
-				// Call function and make the table.
-				var makeit = tablemaker(["ItemNo"]);
+			var create = tablesorter(["ItemNo"]);
 
 			});
 
 
+
 		</script>
 
-	</body></center>
+	</center></body>
 </html>
