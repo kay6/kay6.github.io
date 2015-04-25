@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 	<head>
 		<meta charset="utf-8">
 		<title>Andy IE59000 - Exam2 - Question 3.2</title>
@@ -64,7 +64,7 @@
 						.enter()
 						.append("tr")
 						.sort(function (a,b) {
-							return a == null || b == null ?0: compare(a[name],b[name]);
+							return a == null || b == null ? 0: compare(a[name],b[name]);
 						});
 
 					//Create a cell in each row
@@ -78,7 +78,8 @@
 							return "tablesorter('"+d[0]+"');";
 						})
 						.text(function(d) {
-							return d[1];
+							return d[1]
+							console.log("td " +d[1]);
 						});
 
 				}
@@ -88,6 +89,7 @@
 				}
 
 				function compare (c,d) {
+					// the problem may be in here. Re-attack the logic if time available
 					c = c.toLowerCase();
 					d = d.toLowerCase();
 					return c>d ? 1 : c == d ? 0 : -1;
@@ -102,6 +104,7 @@
 							back.push(fixKey(key, input[key]));
 						}
 					}
+					console.log(back)
 					return back;
 				}
 
