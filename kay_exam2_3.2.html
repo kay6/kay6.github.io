@@ -58,6 +58,7 @@
 						});
 
 					// Create the rows for each object
+					// Something broken in here.
 					var rows = d3.select("tbody")
 						.selectAll("tr")
 						.data(data)
@@ -89,7 +90,7 @@
 					return [a,b];
 				}
 
-				function compare (c,d) {
+				function compare(c,d) {
 					// the problem may be in here. Re-attack the logic if time available
 					c = c.toLowerCase();
 					d = d.toLowerCase();
